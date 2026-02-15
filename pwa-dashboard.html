@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track your programming learning progress with CodePath">
+    <meta name="theme-color" content="#FF6B35">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CodePath">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <title>Dashboard - CodePath</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Offline Indicator -->
+    <div id="offlineIndicator" class="offline-indicator" style="display: none;">
+        <span>📡 You're offline - Your progress is saved locally</span>
+    </div>
+
+    <!-- Update Banner -->
+    <div id="updateBanner" class="update-banner" style="display: none;">
+        <div class="update-banner-content">
+            <span>🎉 New version available!</span>
+            <button class="btn btn-primary btn-small" id="updateButton">Update Now</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <svg width="35" height="35" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 5L45 15V35L25 45L5 35V15L25 5Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+                    <path d="M25 15L35 20V30L25 35L15 30V20L25 15Z" fill="currentColor"/>
+                </svg>
+                <span>CodePath</span>
+            </div>
+            
+            <div class="nav-user">
+                <!-- Network Status -->
+                <div id="networkStatus" class="network-status online">
+                    <span class="network-status-dot"></span>
+                    <span id="networkStatusText">Online</span>
+                </div>
+                
+                <div class="user-info">
+                    <span class="user-name" id="userName">Student</span>
+                    <span class="user-email" id="userEmail">student@codepath.com</span>
+                </div>
+                <button class="btn btn-logout" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <!-- Stats Overview -->
+        <div class="stats-section">
+            <div class="welcome-card">
+                <h1>Welcome back, <span id="welcomeName">Student</span>! 👋</h1>
+                <p>Keep pushing forward. Every line of code brings you closer to your goals.</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="overallProgress">0%</div>
+                        <div class="stat-label">Overall Progress</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="completedModules">0</div>
+                        <div class="stat-label">Modules Completed</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="currentYear">Year 1</div>
+                        <div class="stat-label">Current Year</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="streakDays">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary continue-btn" id="continueLearning">
+                Continue Learning →
+            </button>
+        </div>
+
+        <!-- Roadmap Section -->
+        <div class="roadmap-section">
+            <h2 class="section-title">Your 3-Year Roadmap</h2>
+            
+            <div id="roadmapContainer" class="roadmap-container">
+                <!-- Years will be dynamically generated here -->
+            </div>
+        </div>
+
+        <!-- Admin Link (if applicable) -->
+        <div class="admin-link-section">
+            <a href="admin.html" class="admin-link">🔧 Admin View</a>
+        </div>
+    </div>
+
+    <!-- Share Progress Button -->
+    <button class="share-button" id="shareProgressBtn" title="Share Your Progress">
+        📤
+    </button>
+
+    <script src="auth.js"></script>
+    <script src="application.js"></script>
+    <script src="pwa.js"></script>
+    <script>
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'pwa-index.html';
+                return;
+            }
+
+            // Initialize the dashboard
+            initializeDashboard();
+            
+            // Setup network status monitoring
+            setupNetworkStatus();
+            
+            // Setup share button
+            setupShareButton();
+        });
+
+        function initializeDashboard() {
+            const user = getUserData();
+            
+            // Update user info in navbar
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('welcomeName').textContent = user.name.split(' ')[0];
+            
+            // Update stats
+            updateDashboardStats(user);
+            
+            // Render roadmap
+            renderRoadmap(user);
+            
+            // Setup continue learning button
+            setupContinueLearning();
+        }
+
+        function setupContinueLearning() {
+            document.getElementById('continueLearning').addEventListener('click', function() {
+                const firstIncomplete = document.querySelector('.topic-item:not(.completed)');
+                if (firstIncomplete) {
+                    firstIncomplete.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstIncomplete.classList.add('highlight-pulse');
+                    setTimeout(() => {
+                        firstIncomplete.classList.remove('highlight-pulse');
+                    }, 2000);
+                }
+            });
+        }
+
+        function setupNetworkStatus() {
+            const statusElement = document.getElementById('networkStatus');
+            const statusText = document.getElementById('networkStatusText');
+            
+            function updateNetworkStatus() {
+                if (navigator.onLine) {
+                    statusElement.className = 'network-status online';
+                    statusText.textContent = 'Online';
+                } else {
+                    statusElement.className = 'network-status offline';
+                    statusText.textContent = 'Offline';
+                }
+            }
+            
+            window.addEventListener('online', updateNetworkStatus);
+            window.addEventListener('offline', updateNetworkStatus);
+            
+            updateNetworkStatus();
+        }
+
+        function setupShareButton() {
+            const shareBtn = document.getElementById('shareProgressBtn');
+            shareBtn.addEventListener('click', () => {
+                const user = getUserData();
+                const progress = calculateOverallProgress(user);
+                
+                if (window.pwaFunctions && window.pwaFunctions.shareProgress) {
+                    window.pwaFunctions.shareProgress({ percentage: progress });
+                } else {
+                    // Fallback
+                    alert(`I've completed ${progress}% of my programming journey on CodePath! 🚀`);
+                }
+            });
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About CodePath</h3>
+                    <p>Your complete programming learning roadmap from basics to full-stack mastery. Track your progress, celebrate milestones, and become the developer you aspire to be.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="pwa-dashboard.html">🏠 Dashboard</a></li>
+                        <li><a href="pwa-admin.html">🔧 Admin</a></li>
+                        <li><a href="#" onclick="handleLogout()">🚪 Logout</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">📚 Documentation</a></li>
+                        <li><a href="#">🎓 Tutorials</a></li>
+                        <li><a href="#">❓ FAQ</a></li>
+                        <li><a href="#">💬 Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <p>Join our community and stay updated.</p>
+                    <div class="social-links">
+                        <a href="https://youtube.com" class="social-icon" title="YouTube" target="_blank">📺</a>
+                        <a href="https://instagram.com" class="social-icon" title="Instagram" target="_blank">📷</a>
+                        <a href="https://facebook.com" class="social-icon" title="Facebook" target="_blank">👥</a>
+                        <a href="https://twitter.com" class="social-icon" title="Twitter" target="_blank">𝕏</a>
+                        <a href="https://github.com" class="social-icon" title="GitHub" target="_blank">🐙</a>
+                        <a href="https://discord.com" class="social-icon" title="Discord" target="_blank">💬</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+                <div class="footer-copyright">&copy; 2026 CodePath. All rights reserved.</div>
+                <div class="footer-credit">Made with 💖 by <a href="https://github.com/charankkopalle" target="_blank">Charan K Kopalle</a></div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

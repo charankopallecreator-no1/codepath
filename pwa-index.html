@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track your 3-year programming journey from fundamentals to full-stack mastery with CodePath">
+    <meta name="theme-color" content="#FF6B35">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CodePath">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-192x192.png">
+    
+    <title>CodePath - Your Programming Journey</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="landing-page">
+    <!-- PWA Install Banner -->
+    <div id="installBanner" class="install-banner" style="display: none;">
+        <div class="install-banner-content">
+            <div class="install-banner-text">
+                <strong>📱 Install CodePath</strong>
+                <p>Get the app experience with offline access!</p>
+            </div>
+            <div class="install-banner-actions">
+                <button class="btn btn-primary btn-small" id="installButton">Install</button>
+                <button class="btn btn-secondary btn-small" id="dismissInstall">Later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offline Indicator -->
+    <div id="offlineIndicator" class="offline-indicator" style="display: none;">
+        <span>📡 You're offline - Your progress is saved locally</span>
+    </div>
+
+    <!-- Update Available Banner -->
+    <div id="updateBanner" class="update-banner" style="display: none;">
+        <div class="update-banner-content">
+            <span>🎉 New version available!</span>
+            <button class="btn btn-primary btn-small" id="updateButton">Update Now</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25 5L45 15V35L25 45L5 35V15L25 5Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+                        <path d="M25 15L35 20V30L25 35L15 30V20L25 15Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <h1 class="logo-text">CodePath</h1>
+                <span class="pwa-badge">PWA</span>
+            </div>
+            
+            <h2 class="hero-title">Master Programming in <span class="highlight">3 Years</span></h2>
+            <p class="hero-subtitle">A structured roadmap from basics to full-stack mastery. Track your progress, celebrate milestones, and become the developer you aspire to be. <strong>Works offline!</strong></p>
+            
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="showAuthModal('signup')">Start Your Journey</button>
+                <button class="btn btn-secondary" onclick="showAuthModal('login')">Login</button>
+            </div>
+
+            <!-- PWA Features -->
+            <div class="pwa-features">
+                <div class="pwa-feature">
+                    <span class="pwa-icon">📱</span>
+                    <span>Install as App</span>
+                </div>
+                <div class="pwa-feature">
+                    <span class="pwa-icon">🔒</span>
+                    <span>Works Offline</span>
+                </div>
+                <div class="pwa-feature">
+                    <span class="pwa-icon">⚡</span>
+                    <span>Fast & Reliable</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="floating-card card-1">
+                <div class="card-icon">💻</div>
+                <div class="card-label">11 Languages</div>
+            </div>
+            <div class="floating-card card-2">
+                <div class="card-icon">🎯</div>
+                <div class="card-label">Track Progress</div>
+            </div>
+            <div class="floating-card card-3">
+                <div class="card-icon">🚀</div>
+                <div class="card-label">Real Projects</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <h3 class="section-title">Why Choose CodePath?</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h4>Comprehensive Curriculum</h4>
+                <p>From C to React, covering all major programming languages and frameworks</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h4>Progress Tracking</h4>
+                <p>Visual progress bars and checkpoints to keep you motivated</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h4>Structured Learning</h4>
+                <p>3-year roadmap designed by industry experts</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h4>Hands-on Projects</h4>
+                <p>Build real-world projects after every module</p>
+            </div>
+            <div class="feature-card pwa-highlight">
+                <div class="feature-icon">🔒</div>
+                <h4>Offline Access</h4>
+                <p>Learn anywhere, anytime - even without internet connection</p>
+            </div>
+            <div class="feature-card pwa-highlight">
+                <div class="feature-icon">📱</div>
+                <h4>Native App Experience</h4>
+                <p>Install on your device for a seamless app-like experience</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form">
+                <h2>Welcome Back!</h2>
+                <p class="auth-subtitle">Continue your learning journey</p>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">Email or Username</label>
+                        <input type="text" id="loginEmail" required placeholder="Enter your email or username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required placeholder="Enter your password">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">Login</button>
+                </form>
+                
+                <p class="auth-switch">Don't have an account? <a href="#" onclick="switchToSignup()">Sign Up</a></p>
+            </div>
+            
+            <!-- Signup Form -->
+            <div id="signupForm" class="auth-form" style="display: none;">
+                <h2>Start Your Journey</h2>
+                <p class="auth-subtitle">Create your account and begin learning</p>
+                
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" required placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" required placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupUsername">Username</label>
+                        <input type="text" id="signupUsername" required placeholder="Choose a username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" required minlength="6" placeholder="Create a password (min 6 characters)">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                </form>
+                
+                <p class="auth-switch">Already have an account? <a href="#" onclick="switchToLogin()">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="application.js"></script>
+    <script src="pwa.js"></script>
+    <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        function showAuthModal(type) {
+            document.getElementById('authModal').style.display = 'flex';
+            if (type === 'login') {
+                switchToLogin();
+            } else {
+                switchToSignup();
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        function switchToLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+        }
+
+        function switchToSignup() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('authModal');
+            if (event.target === modal) {
+                closeAuthModal();
+            }
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <!-- About -->
+                <div class="footer-section">
+                    <h3>About CodePath</h3>
+                    <p>Your complete programming learning roadmap from basics to full-stack mastery. Track your progress, celebrate milestones, and become the developer you aspire to be.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">🏠 Home</a></li>
+                        <li><a href="#features">✨ Features</a></li>
+                        <li><a href="#" onclick="showAuthModal('login')">🔐 Login</a></li>
+                        <li><a href="#" onclick="showAuthModal('signup')">📝 Sign Up</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">📚 Documentation</a></li>
+                        <li><a href="#">🎓 Tutorials</a></li>
+                        <li><a href="#">❓ FAQ</a></li>
+                        <li><a href="#">💬 Support</a></li>
+                    </ul>
+                </div>
+
+                <!-- Follow Us -->
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <p>Join our community and stay updated with the latest features and learning resources.</p>
+                    <div class="social-links">
+                        <a href="https://youtube.com" class="social-icon" title="YouTube" target="_blank">📺</a>
+                        <a href="https://instagram.com" class="social-icon" title="Instagram" target="_blank">📷</a>
+                        <a href="https://facebook.com" class="social-icon" title="Facebook" target="_blank">👥</a>
+                        <a href="https://twitter.com" class="social-icon" title="Twitter" target="_blank">𝕏</a>
+                        <a href="https://github.com" class="social-icon" title="GitHub" target="_blank">🐙</a>
+                        <a href="https://discord.com" class="social-icon" title="Discord" target="_blank">💬</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    &copy; 2026 CodePath. All rights reserved.
+                </div>
+                <div class="footer-credit">
+                    Made with 💖 by <a href="https://github.com/charankkopalle" target="_blank">Charan K Kopalle</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
