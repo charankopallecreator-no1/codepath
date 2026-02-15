@@ -82,7 +82,7 @@
                     <span class="pwa-icon">📱</span>
                     <span>Install as App</span>
                 </div>
-                <div class="pwa-feature">
+                <div class="pwa-feature" id="offlineFeature" style="cursor: pointer;">
                     <span class="pwa-icon">🔒</span>
                     <span>Works Offline</span>
                 </div>
@@ -242,14 +242,109 @@
             document.getElementById('signupForm').style.display = 'block';
         }
 
+        // Admin PIN Modal Functions
+        function showPinModal() {
+            document.getElementById('pinModal').style.display = 'flex';
+            document.getElementById('adminPin').focus();
+            document.getElementById('adminPin').value = '';
+        }
+
+        function closePinModal() {
+            document.getElementById('pinModal').style.display = 'none';
+            document.getElementById('adminPin').value = '';
+        }
+
+        function verifyAdminPin() {
+            const pin = document.getElementById('adminPin').value;
+            const correctPin = '2003'; // Your admin PIN
+            
+            if (pin === correctPin) {
+                // Logout if logged in as regular user
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('currentUserRole');
+                
+                // Show admin login modal
+                closePinModal();
+                showAuthModal('login');
+                
+                // Show alert that admin login is ready
+                setTimeout(() => {
+                    alert('Admin access unlocked! Login with admin email: charankkopallecreator@gmail.com');
+                }, 500);
+                
+                console.log('[Admin] PIN verified - Admin access unlocked');
+            } else {
+                alert('❌ Incorrect PIN! Try again.');
+                document.getElementById('adminPin').value = '';
+                document.getElementById('adminPin').focus();
+            }
+        }
+
+        // Click counter for Works Offline button
+        let offlineClickCount = 0;
+        let offlineClickTimer = null;
+        
+        const offlineFeature = document.getElementById('offlineFeature');
+        if (offlineFeature) {
+            offlineFeature.addEventListener('click', function() {
+                offlineClickCount++;
+                console.log('[Admin] Works Offline clicked:', offlineClickCount, 'times');
+                
+                // Reset counter if more than 5 seconds have passed
+                clearTimeout(offlineClickTimer);
+                offlineClickTimer = setTimeout(() => {
+                    offlineClickCount = 0;
+                }, 5000);
+                
+                // Show PIN modal after 3 clicks
+                if (offlineClickCount === 3) {
+                    showPinModal();
+                    offlineClickCount = 0;
+                }
+            });
+        }
+        
+        // Handle Enter key in PIN input
+        const pinInput = document.getElementById('adminPin');
+        if (pinInput) {
+            pinInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyAdminPin();
+                }
+            });
+        }
+
         // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('authModal');
             if (event.target === modal) {
                 closeAuthModal();
             }
+            const pinModal = document.getElementById('pinModal');
+            if (event.target === pinModal) {
+                closePinModal();
+            }
         }
     </script>
+
+    <!-- Admin PIN Modal -->
+    <div id="pinModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closePinModal()">&times;</span>
+            <h2>🔐 Admin Access</h2>
+            <p style="color: #666; margin-bottom: 20px;">Enter the admin PIN to access admin panel</p>
+            
+            <div class="form-group">
+                <label for="adminPin">PIN</label>
+                <input type="password" id="adminPin" placeholder="Enter 4-digit PIN" maxlength="4" style="font-size: 24px; letter-spacing: 10px; text-align: center;">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-primary btn-full" onclick="verifyAdminPin()">Access Admin</button>
+                <button class="btn btn-secondary btn-full" onclick="closePinModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
