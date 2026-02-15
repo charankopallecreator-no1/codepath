@@ -296,8 +296,11 @@
     <!-- Create Test Modal -->
     <div id="createTestModal" class="modal">
         <div class="modal-content modal-large">
-            <span class="close-btn" onclick="closeCreateTestModal()">&times;</span>
-            <h2>Create New Test</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg);">
+                <h2 style="margin: 0;">Create New Test</h2>
+                <span class="close-btn" onclick="closeCreateTestModal()">&times;</span>
+            </div>
+            <button class="btn-back" onclick="closeCreateTestModal()">← Back</button>
             
             <form id="createTestForm" onsubmit="handleCreateTest(event)">
                 <div class="form-row">
@@ -361,8 +364,11 @@
     <!-- Assign Test Modal -->
     <div id="assignTestModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeAssignTestModal()">&times;</span>
-            <h2>Assign Test to Students</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg);">
+                <h2 style="margin: 0;">Assign Test to Students</h2>
+                <span class="close-btn" onclick="closeAssignTestModal()">&times;</span>
+            </div>
+            <button class="btn-back" onclick="closeAssignTestModal()">← Back</button>
             
             <div class="assign-test-content">
                 <h3 id="assignTestTitle"></h3>
