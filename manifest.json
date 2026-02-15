@@ -85,7 +85,7 @@
       "name": "Admin",
       "short_name": "Admin",
       "description": "View admin dashboard",
-      "url": "./admin.html",
+      "url": "./pwa-admin.html",
       "icons": [{ "src": "./icons/icon-96x96.png", "sizes": "96x96" }]
     }
   ],
